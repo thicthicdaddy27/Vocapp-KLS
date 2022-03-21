@@ -57,10 +57,12 @@ struct ContentView: View {
             
             }
         Form {
-            TextField(text: $Eingabe, prompt: Text("Eingabe")) {
-                Text("Deutsch")
+            TextField(text: $Eingabe, prompt: Text("Eingabe"))
+            {
+                Text("Eingabe")
             }
-            
+            Divider()
+            Text(Eingabe)
         }
             }
             
