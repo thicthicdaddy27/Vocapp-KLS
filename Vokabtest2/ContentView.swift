@@ -10,9 +10,11 @@ import CoreData
 
 
 struct ContentView: View {
-    @State private var Eingabe: String = ""
+    //@State private var Eingabe: String = ""
     
     @Environment(\.managedObjectContext) private var viewContext
+    
+    @State private var displayCreateItemView = false
 
     @FetchRequest(
         sortDescriptors: [NSSortDescriptor(keyPath: \Item.timestamp, ascending: true)],
@@ -28,10 +30,10 @@ struct ContentView: View {
                 List {
                     ForEach(items) { item in
                         NavigationLink {
-                            Text("Item at \(item.timestamp!, formatter: itemFormatter) with \(item.deutsch ?? "Test") as \(item.englisch ?? "Test2")")
+                            Text("Item at \(item.deutsch ?? "Test") as \(item.englisch ?? "Test2")")
                            
                         } label: {
-                            Text(item.timestamp!, formatter: itemFormatter)
+                            Text("Zuletzt hinzugefügt")
                         }
                         
                     }
@@ -48,6 +50,11 @@ struct ContentView: View {
                     ToolbarItem {
                         Button(action: addItem) {
                             Label("Add Item", systemImage: "plus")
+                                .sheet(isPresented: $displayCreateItemView) {
+                                    CreateItemView(displayCreateItemView: self.$displayCreateItemView)
+                                    
+                                }
+
                         }
                     }
                     
@@ -56,16 +63,16 @@ struct ContentView: View {
                 
             
             }
-        Form {
-            TextField(text: $Eingabe, prompt: Text("Eingabe"))
-            {
-                Text("Eingabe")
-            }
-            Divider()
-            Text(Eingabe)
+        //Form {
+          //  TextField(text: $Eingabe, prompt: Text("Eingabe"))
+            //{
+            //    Text("Eingabe")
+            //}
+            //Divider()
+            //Text(Eingabe)
 
-        }
-            }
+        //}
+           }
             
             
         
@@ -90,10 +97,8 @@ struct ContentView: View {
 
     private func addItem() {
         withAnimation {
-            let newItem = Item(context: viewContext)
-            newItem.timestamp = Date()
-            newItem.deutsch = "Zwei"
-            newItem.englisch = "two"
+            self.displayCreateItemView.toggle()
+            
 
             do {
                 try viewContext.save()
@@ -128,6 +133,34 @@ private let itemFormatter: DateFormatter = {
     formatter.timeStyle = .medium
     return formatter
 }()
+
+struct CreateItemView : View {
+    @State private var itemTitle = ""
+    
+    @Binding var displayCreateItemView: Bool
+    
+    @Environment(\.managedObjectContext) var viewContext
+    
+    var body: some View {
+        NavigationView {
+            TextField("Title", text: $itemTitle)
+                .navigationBarItems(leading: Button(action: {
+                    self.displayCreateItemView = false
+                }) {
+                    Text("Cancel")
+                }, trailing: Button(action: {
+                    let newItem = Item(context: viewContext)
+                    newItem.deutsch = self.itemTitle
+                    self.displayCreateItemView = false
+                }) {
+                    Text("Add")
+                        .bold()
+                })
+                .padding()
+        }
+    }
+}
+
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
