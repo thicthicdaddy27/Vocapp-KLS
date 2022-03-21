@@ -63,6 +63,7 @@ struct ContentView: View {
             }
             Divider()
             Text(Eingabe)
+
         }
             }
             
@@ -133,3 +134,5 @@ struct ContentView_Previews: PreviewProvider {
         ContentView().environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
     }
 }
+
+
