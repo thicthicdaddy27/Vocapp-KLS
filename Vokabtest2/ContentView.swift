@@ -136,6 +136,7 @@ private let itemFormatter: DateFormatter = {
 
 struct CreateItemView : View {
     @State private var itemTitle = ""
+    @State private var itemTitle2 = ""
     
     @Binding var displayCreateItemView: Bool
     
@@ -151,12 +152,15 @@ struct CreateItemView : View {
                 }, trailing: Button(action: {
                     let newItem = Item(context: viewContext)
                     newItem.deutsch = self.itemTitle
+                    newItem.englisch = self.itemTitle2
                     self.displayCreateItemView = false
                 }) {
                     Text("Add")
                         .bold()
                 })
                 .padding()
+          
+            
         }
     }
 }
