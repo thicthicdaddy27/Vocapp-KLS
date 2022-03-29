@@ -144,22 +144,34 @@ struct CreateItemView : View {
     
     var body: some View {
         NavigationView {
-            TextField("Title", text: $itemTitle)
-                .navigationBarItems(leading: Button(action: {
-                    self.displayCreateItemView = false
-                }) {
-                    Text("Cancel")
-                }, trailing: Button(action: {
-                    let newItem = Item(context: viewContext)
-                    newItem.deutsch = self.itemTitle
-                    newItem.englisch = self.itemTitle2
-                    self.displayCreateItemView = false
-                }) {
-                    Text("Add")
-                        .bold()
+            VStack {
+                Label(title: {
+                    Text("Add new vokabulary item").font(.largeTitle)
+                }, icon: {
+                    Image(systemName: "book").resizable()
+                        .scaledToFit()
+                        .frame(height: 40)
                 })
-                .padding()
-          
+                    
+        
+                TextField("Deutsch", text: $itemTitle)
+                    .navigationBarItems(leading: Button(action: {
+                        self.displayCreateItemView = false
+                    }) {
+                        Text("Cancel")
+                    }, trailing: Button(action: {
+                        let newItem = Item(context: viewContext)
+                        newItem.deutsch = self.itemTitle
+                        newItem.englisch = self.itemTitle2
+                        self.displayCreateItemView = false
+                    }) {
+                        Text("Add")
+                            .bold()
+                    })
+                    .padding()
+                TextField("Englisch", text: $itemTitle2) ;
+                
+            }
             
         }
     }
